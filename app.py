@@ -30,4 +30,6 @@ def chat():
         return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
-    app.run(port=5000, debug=True)
+    port = int(os.environ.get("PORT", 10000))  # Usa el puerto que Render asigna
+    app.run(host="0.0.0.0", port=port, debug=True)
+
