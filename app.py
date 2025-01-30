@@ -6,8 +6,8 @@ import os
 app = Flask(__name__)
 CORS(app)  # Habilitar CORS para permitir conexiones desde cualquier origen
 
-# Configurar la API Key desde una variable de entorno
-openai.api_key = os.getenv("OPENAI_API_KEY")
+# Configurar la API Key correctamente
+client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 @app.route("/chat", methods=["POST"])
 def chat():
@@ -18,7 +18,7 @@ def chat():
 
     try:
         # Llamar a GPT-4 para generar una respuesta
-        response = openai.ChatCompletion.create(
+        response = client.chat.completions.create(
             model="gpt-4",
             messages=[
                 {"role": "system", "content": "Eres un asistente de ventas experto en Shopify."},
@@ -32,4 +32,3 @@ def chat():
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 10000))  # Usa el puerto que Render asigna
     app.run(host="0.0.0.0", port=port, debug=True)
-
